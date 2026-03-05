@@ -1,4 +1,4 @@
-🚀 Ejercicios de Bootcamp – HTML, Python y Pandas
+# 🚀 Ejercicios de Bootcamp – HTML, Python y Pandas
 
 Este repositorio contiene ejercicios y prácticas realizadas durante un bootcamp de programación y análisis de datos.
 
@@ -6,12 +6,12 @@ El objetivo es reforzar los fundamentos de HTML, programación en Python y anál
 
 Este repositorio refleja mi proceso de aprendizaje mientras avanzo en el desarrollo de competencias en programación y manipulación de datos.
 
-🛠 Tecnologías utilizadas
+## 🛠 Tecnologías utilizadas
 
-HTML5
+**HTML5**
 
-Python 3
+**Python 3**
 
-Pandas
+**Pandas**
 
-Jupyter Notebook
+**Jupyter Notebook**
