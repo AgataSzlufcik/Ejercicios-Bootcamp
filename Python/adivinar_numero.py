@@ -30,6 +30,5 @@ while True:
         else:
             print("Gracias por jugar! Nos vemos en el otro juego")
             break
-
     
   
