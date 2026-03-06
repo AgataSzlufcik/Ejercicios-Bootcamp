@@ -1,0 +1,62 @@
+import json
+def juego():
+    arbol = {
+        "pregunta" : "¿es una animal?",
+        "si": {
+                "pregunta" : "¿ladra?",
+                "si" : "perro",
+                "no" : "gato"
+        },
+        "no" : {
+             "pregunta" : "¿es un vegetal?",
+        "si" : {
+            "pregunta" : "¿es rojo?",
+            "si" : "manzana",
+            "no" : "lechuga"
+        },
+        "no" : {
+            "pregunta" : "¿es una mineral?",
+            "si" : "cobre",
+            "no" : "algo desconocido"
+        }
+    }
+}
+    print("Bienvenidos al juego")
+    print("Es sencillo, solo piensa en un animal, vegetal o mineral y yo lo adivino")
+
+    while True:
+        nodo_actual = arbol
+        ramas = None
+
+        while isinstance(nodo_actual, dict):
+                respuesta = input(f"{nodo_actual["pregunta"]} (s/n)").lower()
+                if respuesta == "s":
+                    ramas = "si"
+                else:
+                    ramas = "no"
+
+                nodo_anterior = nodo_actual
+                nodo_actual = nodo_actual[ramas]
+
+        adivinanza = nodo_actual
+        confirmar = input(f"¿es un {adivinanza} (s/n)").lower()
+
+        if confirmar == "s":
+                print("Gane")
+        else:
+            print("Me rindo")
+            nuevo_objeto = input("¿en qué estás pensando?")
+            nueva_pregunta = input(f"Escribe una pregunta que sea SI para que {nuevo_objeto} y NO para {adivinanza}")
+
+            nueva_rama = {
+                    "pregunta" : nueva_pregunta,
+                    "si" : nuevo_objeto,
+                    "no" : adivinanza
+                    }
+            nodo_anterior[ramas] = nueva_rama
+            print("quiero seguir jugando")
+            if input("\n¿Quieres? (s/n)").lower() !="s":
+                break
+        print("Addios")
+juego()
+        
