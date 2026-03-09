@@ -1,0 +1,11 @@
+ticket_id,producto,categoria,precio_eur,unidades,ciudad,fecha
+T001,Camiseta Glow,Ropa,20,2,Madrid,2026-03-01
+T002,Tote Bag Pixel,Accesorios,12,3,Valencia,2026-03-01
+T003,Sticker Pack,Accesorios,5,6,Sevilla,2026-03-01
+T004,Gorra Night,Ropa,15,2,Bilbao,2026-03-02
+T005,Vaso Reutilizable,Hogar,8,4,Barcelona,2026-03-02
+T006,Camiseta Glow,Ropa,20,1,Madrid,2026-03-02
+T007,Tote Bag Pixel,Accesorios,12,2,Malaga,2026-03-03
+T008,Sticker Pack,Accesorios,5,5,Zaragoza,2026-03-03
+T009,Gorra Night,Ropa,15,3,Valencia,2026-03-03
+T010,Vaso Reutilizable,Hogar,8,2,Sevilla,2026-03-03
