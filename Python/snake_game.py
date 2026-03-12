@@ -1,6 +1,8 @@
 import random
 import tkinter as tk
 
+
+
 def launch_snake_break(board_size=18, cell_size=22, speed_ms=120):
     root = tk.Tk()
     root.title("☕ Mini Snake Break")
