@@ -1,4 +1,4 @@
-# 🚀 Ejercicios de Bootcamp – HTML, Python y Pandas
+# 🚀 Ejercicios de Bootcamp – HTML, Python, SQL y Pandas
 
 Este repositorio contiene ejercicios y prácticas realizadas durante un bootcamp de programación y análisis de datos.
 
@@ -15,3 +15,5 @@ Este repositorio refleja mi proceso de aprendizaje mientras avanzo en el desarro
 **Pandas**
 
 **Jupyter Notebook**
+
+**SQL**
