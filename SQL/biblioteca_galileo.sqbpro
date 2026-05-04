@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="biblioteca_galileo.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser query pragmas" current="2"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2273"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="prestamos" custom_title="0" dock_id="2" table="4,9:mainprestamos"/><dock_state state="000000ff00000000fd000000010000000200000445000002b4fc0100000002fb000000160064006f0063006b00420072006f00770073006500310100000000000004450000000000000000fb000000160064006f0063006b00420072006f00770073006500320100000000000004450000010100ffffff000002b40000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="autores" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="21"/><column index="2" value="143"/><column index="3" value="91"/><column index="4" value="124"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="editoriales" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="21"/><column index="2" value="125"/><column index="3" value="84"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="estadisticas_usuarios" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="21"/><column index="2" value="86"/><column index="3" value="115"/><column index="4" value="132"/><column index="5" value="104"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="libros" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="21"/><column index="2" value="97"/><column index="3" value="168"/><column index="4" value="64"/><column index="5" value="84"/><column index="6" value="115"/><column index="7" value="59"/><column index="8" value="76"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="prestamos" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort><column index="6" mode="0"/></sort><column_widths><column index="1" value="21"/><column index="2" value="78"/><column index="3" value="59"/><column index="4" value="114"/><column index="5" value="183"/><column index="6" value="155"/><column index="7" value="105"/><column index="8" value="65"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="prestamos_activos" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="21"/><column index="2" value="86"/><column index="3" value="135"/><column index="4" value="168"/><column index="5" value="143"/><column index="6" value="114"/><column index="7" value="183"/><column index="8" value="131"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="usuarios" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="21"/><column index="2" value="86"/><column index="3" value="135"/><column index="4" value="69"/><column index="5" value="104"/><column index="6" value="48"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">CREATE TABLE autores (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    nacionalidad TEXT,
+    fecha_nacimiento DATE
+);
+
+CREATE TABLE editoriales (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL UNIQUE,
+    pais TEXT
+);
+
+CREATE TABLE libros (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    isbn TEXT UNIQUE NOT NULL,
+    titulo TEXT NOT NULL,
+    autor_id INTEGER NOT NULL,
+    editorial_id INTEGER,
+    año_publicacion INTEGER CHECK (año_publicacion &gt; 1000 AND año_publicacion &lt;= 2100),
+    paginas INTEGER CHECK (paginas &gt; 0),
+    disponible BOOLEAN DEFAULT 1,
+    FOREIGN KEY (autor_id) REFERENCES autores(id),
+    FOREIGN KEY (editorial_id) REFERENCES editoriales(id)
+);
+
+CREATE TABLE usuarios (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    telefono TEXT,
+    fecha_registro DATE DEFAULT CURRENT_DATE,
+    activo BOOLEAN DEFAULT 1
+);
+
+CREATE TABLE prestamos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id INTEGER NOT NULL,
+    libro_id INTEGER NOT NULL,
+    fecha_prestamo DATE DEFAULT CURRENT_DATE,
+    fecha_devolucion_prevista DATE,
+    fecha_devolucion_real DATE,
+    dias_prestamo INTEGER NOT NULL CHECK (dias_prestamo &gt; 0),
+    devuelto BOOLEAN DEFAULT 0,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (libro_id) REFERENCES libros(id)
+);
+
+CREATE INDEX idx_libros_autor ON libros(autor_id);
+CREATE INDEX idx_libros_isbn ON libros(isbn);
+CREATE INDEX idx_prestamos_usuario ON prestamos(usuario_id);
+
+
+-- Autores
+INSERT INTO autores (nombre, nacionalidad, fecha_nacimiento) VALUES
+    ('Gabriel García Márquez', 'Colombia', '1927-03-06'),
+    ('Isabel Allende', 'Chile', '1942-08-02'),
+    ('Haruki Murakami', 'Japón', '1949-01-12'),
+    ('Chimamanda Ngozi Adichie', 'Nigeria', '1977-09-15'),
+    ('Yuval Noah Harari', 'Israel', '1976-02-24');
+
+-- Editoriales
+INSERT INTO editoriales (nombre, pais) VALUES
+    ('Penguin Random House', 'Estados Unidos'),
+    ('Anagrama', 'España'),
+    ('Tusquets', 'España'),
+    ('Debate', 'España');
+
+-- Libros
+INSERT INTO libros (isbn, titulo, autor_id, editorial_id, año_publicacion, paginas) VALUES
+    ('978-0307474728', 'Cien años de soledad', 1, 1, 1967, 417),
+    ('978-8439721086', 'La casa de los espíritus', 2, 3, 1982, 448),
+    ('978-8433920423', 'Tokio blues', 3, 2, 1987, 384),
+    ('978-8439729327', 'Americanah', 4, 1, 2013, 512),
+    ('978-8499926711', 'Sapiens', 5, 4, 2011, 496),
+    ('978-0307389732', 'El amor en los tiempos del cólera', 1, 1, 1985, 368),
+    ('978-8490628645', '21 lecciones para el siglo XXI', 5, 4, 2018, 408);
+
+-- Usuarios
+INSERT INTO usuarios (nombre, email, telefono) VALUES
+    ('María González', 'maria.gonzalez@mail.com', '600111222'),
+    ('Carlos Ruiz', 'carlos.ruiz@mail.com', '600333444'),
+    ('Ana Martínez', 'ana.martinez@mail.com', '600555666'),
+    ('Luis Fernández', 'luis.fernandez@mail.com', '600777888'),
+    ('Laura Sánchez', 'laura.sanchez@mail.com', '600999000');
+
+-- Préstamos (algunos devueltos, otros activos)
+INSERT INTO prestamos (usuario_id, libro_id, fecha_prestamo, dias_prestamo, devuelto, fecha_devolucion_real) VALUES
+    (1, 1, '2024-01-10', 15, 1, '2024-01-22'),
+    (2, 3, '2024-01-15', 15, 1, '2024-01-30'),
+    (1, 5, '2024-02-01', 21, 1, '2024-02-20'),
+    (3, 2, '2024-02-10', 15, 0, NULL),
+    (4, 4, '2024-02-15', 15, 0, NULL),
+    (1, 7, '2024-02-20', 21, 0, NULL),
+    (5, 6, '2024-02-25', 15, 0, NULL),
+    (2, 5, '2024-03-01', 21, 0, NULL);
+	
+	SELECT 
+    l.titulo,
+    a.nombre AS autor,
+    e.nombre AS editorial,
+    l.año_publicacion
+FROM libros l
+INNER JOIN autores a ON l.autor_id = a.id
+LEFT JOIN editoriales e ON l.editorial_id = e.id
+ORDER BY l.titulo;
+
+SELECT DISTINCT
+    u.nombre,
+    u.email,
+    u.telefono
+FROM usuarios u
+INNER JOIN prestamos p ON u.id = p.usuario_id
+WHERE p.devuelto = 0;
+
+SELECT l.titulo, a.nombre AS autor
+FROM libros l
+INNER JOIN autores a ON l.autor_id = a.id
+WHERE l.id NOT IN (SELECT libro_id FROM prestamos);
+
+SELECT 
+    u.nombre,
+    COUNT(p.id) AS total_prestamos,
+    SUM(CASE WHEN p.devuelto = 0 THEN 1 ELSE 0 END) AS prestamos_activos
+FROM usuarios u
+LEFT JOIN prestamos p ON u.id = p.usuario_id
+GROUP BY u.id, u.nombre
+ORDER BY total_prestamos DESC;
+
+SELECT 
+    l.titulo,
+    a.nombre AS autor,
+    COUNT(p.id) AS veces_prestado
+FROM libros l
+INNER JOIN autores a ON l.autor_id = a.id
+LEFT JOIN prestamos p ON l.id = p.libro_id
+GROUP BY l.id, l.titulo, a.nombre
+ORDER BY veces_prestado DESC
+LIMIT 5;
+
+SELECT 
+    l.titulo,
+    COUNT(p.id) AS prestamos,
+    ROUND(AVG(p.dias_prestamo), 1) AS promedio_dias
+FROM libros l
+INNER JOIN prestamos p ON l.id = p.libro_id
+GROUP BY l.id, l.titulo
+HAVING COUNT(p.id) &gt; 0
+ORDER BY promedio_dias DESC;
+
+SELECT 
+    u.nombre AS usuario,
+    l.titulo AS libro,
+    p.fecha_prestamo,
+    p.fecha_devolucion_prevista,
+    p.fecha_devolucion_real,
+    JULIANDAY(p.fecha_devolucion_real) - JULIANDAY(p.fecha_devolucion_prevista) AS dias_retraso
+FROM prestamos p
+INNER JOIN usuarios u ON p.usuario_id = u.id
+INNER JOIN libros l ON p.libro_id = l.id
+WHERE p.devuelto = 1
+  AND p.fecha_devolucion_real &gt; p.fecha_devolucion_prevista;
+  
+  SELECT 
+    a.nombre AS autor,
+    COUNT(p.id) AS total_prestamos
+FROM autores a
+INNER JOIN libros l ON a.id = l.autor_id
+INNER JOIN prestamos p ON l.id = p.libro_id
+GROUP BY a.id, a.nombre
+ORDER BY total_prestamos DESC
+LIMIT 3;
+
+
+SELECT 
+    l.titulo AS libro,
+    a.nombre AS autor,
+    u.nombre AS usuario,
+    u.email,
+    p.fecha_prestamo,
+    DATE(p.fecha_prestamo, '+' || p.dias_prestamo || ' days') AS fecha_devolucion_prevista,
+    p.dias_prestamo
+FROM prestamos p
+INNER JOIN usuarios u ON p.usuario_id = u.id
+INNER JOIN libros l ON p.libro_id = l.id
+INNER JOIN autores a ON l.autor_id = a.id
+WHERE p.devuelto = 0
+ORDER BY p.fecha_prestamo;
+
+SELECT 
+    (SELECT COUNT(*) FROM libros) AS total_libros,
+    (SELECT COUNT(*) FROM usuarios) AS total_usuarios,
+    (SELECT COUNT(*) FROM prestamos) AS total_prestamos,
+    (SELECT COUNT(*) FROM prestamos WHERE devuelto = 0) AS prestamos_activos,
+    (SELECT ROUND(AVG(dias_prestamo), 1) FROM prestamos) AS promedio_dias_prestamo;
+	
+	SELECT 
+    STRFTIME('%Y-%m', fecha_prestamo) AS mes,
+    COUNT(*) AS total_prestamos
+FROM prestamos
+GROUP BY mes
+ORDER BY mes DESC;
+
+SELECT 
+    COUNT(*) AS total_devueltos,
+    SUM(CASE 
+        WHEN fecha_devolucion_real &lt;= fecha_devolucion_prevista THEN 1 
+        ELSE 0 
+    END) AS devueltos_a_tiempo,
+    ROUND(
+        SUM(CASE 
+            WHEN fecha_devolucion_real &lt;= fecha_devolucion_prevista THEN 1 
+            ELSE 0 
+        END) * 100.0 / COUNT(*), 
+        2
+    ) AS porcentaje_a_tiempo
+FROM prestamos
+WHERE devuelto = 1;
+
+UPDATE prestamos
+SET 
+    devuelto = 1,
+    fecha_devolucion_real = CURRENT_DATE
+WHERE id = 4;
+
+-- Actualizar disponibilidad del libro
+UPDATE libros
+SET disponible = 1
+WHERE id = (SELECT libro_id FROM prestamos WHERE id = 4);
+
+UPDATE prestamos
+SET 
+    devuelto = 1,
+    fecha_devolucion_real = CURRENT_DATE
+WHERE id = 4;
+
+BEGIN TRANSACTION;
+
+-- Insertar préstamo
+INSERT INTO prestamos (usuario_id, libro_id, dias_prestamo, fecha_devolucion_prevista)
+VALUES (
+    2,  -- Usuario Carlos
+    1,  -- Libro Cien años de soledad
+    15,
+    DATE('now', '+15 days')
+);
+
+-- Marcar libro como no disponible
+UPDATE libros
+SET disponible = 0
+WHERE id = 1;
+
+COMMIT;
+
+CREATE VIEW prestamos_activos AS
+SELECT 
+    p.id,
+    u.nombre AS usuario,
+    u.email,
+    l.titulo AS libro,
+    a.nombre AS autor,
+    p.fecha_prestamo,
+    DATE(p.fecha_prestamo, '+' || p.dias_prestamo || ' days') AS fecha_devolucion_prevista,
+    JULIANDAY('now') - JULIANDAY(p.fecha_prestamo) AS dias_transcurridos
+FROM prestamos p
+INNER JOIN usuarios u ON p.usuario_id = u.id
+INNER JOIN libros l ON p.libro_id = l.id
+INNER JOIN autores a ON l.autor_id = a.id
+WHERE p.devuelto = 0;
+
+-- Usar la vista
+SELECT * FROM prestamos_activos;
+
+CREATE VIEW estadisticas_usuarios AS
+SELECT 
+    u.id,
+    u.nombre,
+    COUNT(p.id) AS total_prestamos,
+    SUM(CASE WHEN p.devuelto = 0 THEN 1 ELSE 0 END) AS prestamos_activos,
+    AVG(p.dias_prestamo) AS promedio_dias
+FROM usuarios u
+LEFT JOIN prestamos p ON u.id = p.usuario_id
+GROUP BY u.id, u.nombre;
+
+-- Usar la vista
+SELECT * FROM estadisticas_usuarios ORDER BY total_prestamos DESC;
+
+
+--Desafío 1: Sistema de multas
+--Añade una tabla de multas para préstamos con retraso:
+
+CREATE TABLE multas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    prestamo_id INTEGER NOT NULL,
+    importe REAL NOT NULL CHECK (importe &gt;= 0),
+    pagada BOOLEAN DEFAULT 0,
+    FOREIGN KEY (prestamo_id) REFERENCES prestamos(id)
+);
+
+
+--Inserta multas calculando 0.50€ por día de retraso.
+
+INSERT INTO multas (prestamo_id, importe)
+SELECT 
+    prestamos.id,
+    (dias_prestamo - 10) * 0.5
+FROM prestamos
+WHERE dias_prestamo &gt; 10;
+
+SELECT * FROM multas;
+
+--- Desafío 2: Historial completo de usuario
+-- Crea una consulta que muestre:
+---Todos los préstamos de un usuario (activos + devueltos)
+--Total de días que ha tenido libros
+--Número de retrasos
+--Total de multas (si implementaste el desafío 1)
+
+
+
+--Desafío 3: Recomendaciones
+--Encuentra libros del mismo autor que los que ha leído un usuario pero que aún no ha tomado prestados.
+
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
